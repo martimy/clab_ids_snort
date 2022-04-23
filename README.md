@@ -1,9 +1,3 @@
----
-output: pdf_document
-geometry: margin=1in
-fontsize: 10pt
----
-
 # Snort lab
 
 This lab demonstrates the use of the intrusion detection/prevention system (IDS/IPS) [Snort](https://snort.org/) in monitoring traffic between a host and a router gateway to an external network.
@@ -48,7 +42,7 @@ To remove the bridge:
 $ sudo ip link del brdg
 ```
 
-## Usage Scenario
+## Simple usage Scenario
 
 To get you started, try the following after starting the lab:
 
