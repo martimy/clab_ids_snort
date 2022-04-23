@@ -1,0 +1,31 @@
+name: ids-snort
+
+topology:
+  nodes:
+    ids:
+      kind: linux
+      image: martimy/snort:0.1
+      binds:
+        - config/ids/snort.conf:/etc/snort/snort.conf
+        - config/ids/myrules.rules:/etc/snort/rules/myrules.rules
+    gtwy:
+      kind: linux
+      image: frrouting/frr
+      binds:
+        - config/gtwy/daemons:/etc/frr/daemons
+        - config/gtwy/frr.conf:/etc/frr/frr.conf
+      exec:
+        - iptables -t nat -A POSTROUTING -j MASQUERADE
+    h1:
+      kind: linux
+      image: wbitt/network-multitool:alpine-minimal
+      exec:
+        - ip addr add 192.168.1.2/24 dev eth1
+        - ip route replace default via 192.168.1.1
+    # note, that the bridge must be created manually
+    brdg:
+      kind: bridge
+  links:
+    - endpoints: ["ids:eth1", "brdg:eth1"]
+    - endpoints: ["gtwy:eth1", "brdg:eth2"]
+    - endpoints: ["h1:eth1", "brdg:eth3"]
